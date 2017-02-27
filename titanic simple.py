@@ -36,7 +36,14 @@ def meanArr(header, arr):
             arr1.append(num) 
     return float(sum(arr1)) / max(len(arr1), 1)
         
-    
+def getArr(header, arr)    :
+    arr1=[]
+    for row in arr:
+        if len(row[header])>0:
+            #print (row[header])
+            arr1.append(float(row[header]))
+    return arr1
+
 
 with open('train.csv', newline='') as csvfile:
    
@@ -79,6 +86,13 @@ meanAge=0
 meanAge = meanArr('Age', popSurv)
 
 print('Average age: {0}'.format(meanAge))
+arr=getArr('Age', popSurv)
+arr
+print ('Min age: {0} Max age: {1}'.format(min(arr), max(arr)))
 
 meanSib = meanArr('SibSp', popSurv)
 print('Average sib spouse: {0}'.format(meanSib))
+
+meanPar = meanArr('Parch', popSurv)
+print('Average parent: {0}'.format(meanPar))
+
