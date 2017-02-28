@@ -43,7 +43,13 @@ def getArr(header, arr)    :
             #print (row[header])
             arr1.append(float(row[header]))
     return arr1
-
+def getStrArr(header, arr)    :
+    arr1=[]
+    for row in arr:
+        if len(row[header])>0:
+            #print (row[header])
+            arr1.append(row[header])
+    return arr1
 
 with open('train.csv', newline='') as csvfile:
    
@@ -96,3 +102,15 @@ print('Average sib spouse: {0}'.format(meanSib))
 meanPar = meanArr('Parch', popSurv)
 print('Average parent: {0}'.format(meanPar))
 
+meanTic = meanArr('Fare', popSurv)
+print('Average Ticket fare: {0}'.format(meanTic))
+
+arr2 = getStrArr('Embarked', popSurv)
+numC = arr2.count('C')
+numQ = arr2.count('Q')
+numS = arr2.count('S')
+print('No C: {0}, No Q: {1}, No S:{2}'.format(numC, numQ, numS))
+
+femProb = femaleInc/(maleInc+femaleInc)
+maleProb = maleInc/(maleInc+femaleInc)
+print ('Female Prob: {0}, Male Prob: {1}'.format(sexProb, maleProb))
