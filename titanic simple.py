@@ -10,6 +10,7 @@ import pandas as pd
 
 import numpy
 
+#functions
 def proportion (val, arr):
     count=0
     for i in arr:
@@ -51,6 +52,21 @@ def getStrArr(header, arr)    :
             arr1.append(row[header])
     return arr1
 
+def getAgeProb(age, arr):
+    ageProb=0
+    count=0
+    upperBound=0
+    while upperBound<age:
+        upperBound=upperBound+5
+    lowerBound=upperBound-5
+    
+    for i in range(lowerBound, upperBound):
+        count=count+arr.count(i)
+    total = len(arr)
+    result = count/total
+    return result
+
+#read data from files
 with open('train.csv', newline='') as csvfile:
    
     spamreader = csv.DictReader(csvfile)
@@ -71,7 +87,7 @@ for row in data:
 df = pd.DataFrame.from_dict(popSurv)
 print(df)
 
-
+#sex
 propMale = proportionArr('Sex', 'male', popSurv)
 propMaleDat = proportionArr('Sex', 'male', data)
 propFemale = proportionArr('Sex', 'female', popSurv)
@@ -87,7 +103,7 @@ femaleInc = propFemale/propFemaleDat
 
 print ('Male factor {0}'.format(maleInc))
 print ('Female factor {0}'.format(femaleInc))
-
+#age
 meanAge=0
 meanAge = meanArr('Age', popSurv)
 
@@ -96,21 +112,36 @@ arr=getArr('Age', popSurv)
 arr
 print ('Min age: {0} Max age: {1}'.format(min(arr), max(arr)))
 
+#siblings
 meanSib = meanArr('SibSp', popSurv)
 print('Average sib spouse: {0}'.format(meanSib))
-
+#parents
 meanPar = meanArr('Parch', popSurv)
 print('Average parent: {0}'.format(meanPar))
-
+#ticket
 meanTic = meanArr('Fare', popSurv)
 print('Average Ticket fare: {0}'.format(meanTic))
-
+#embarkation
 arr2 = getStrArr('Embarked', popSurv)
 numC = arr2.count('C')
 numQ = arr2.count('Q')
 numS = arr2.count('S')
 print('No C: {0}, No Q: {1}, No S:{2}'.format(numC, numQ, numS))
-
+#class
+arr3 = getStrArr('Pclass', popSurv)
+numF = arr3.count('1')
+numSec = arr3.count('2')
+numT = arr3.count('3')
+print('No 1: {0}, No 2: {1}, No 3:{2}'.format(numF, numSec, numT))
+#calculate probabilities
+#sex prob
 femProb = femaleInc/(maleInc+femaleInc)
 maleProb = maleInc/(maleInc+femaleInc)
-print ('Female Prob: {0}, Male Prob: {1}'.format(sexProb, maleProb))
+print ('Female Prob: {0}, Male Prob: {1}'.format(femProb, maleProb))
+
+#age probabilities
+ageArr = getArr('Age', popSurv)
+ageSamp= 16
+ageProb = getAgeProb(ageSamp, ageArr)
+
+print ('Age prob for {1}: {0}'.format(ageProb, ageSamp))
