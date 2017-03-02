@@ -66,6 +66,25 @@ def getAgeProb(age, arr):
     result = count/total
     return result
 
+def getAgeProb2(age, arrWhole, arrSurv):
+    ageProb=0
+    count=0
+    upperBound=0
+    while upperBound<age:
+        upperBound=upperBound+5
+    lowerBound=upperBound-5
+    
+    surCount=0
+    for i in range(lowerBound, upperBound):
+        count=count+arrWhole.count(i)
+        surCount=surCount+arrSurv.count(i)
+    result = surCount/count
+    return result
+
+def getSpouseProb (noSp, arrWhole, arrSurv):
+    result = arrSurv.count(noSp) / arrWhole.count(noSp)
+    return result
+
 #read data from files
 with open('train.csv', newline='') as csvfile:
    
@@ -141,7 +160,15 @@ print ('Female Prob: {0}, Male Prob: {1}'.format(femProb, maleProb))
 
 #age probabilities
 ageArr = getArr('Age', popSurv)
-ageSamp= 16
+wArr = getArr('Age', data)
+ageSamp= 50
 ageProb = getAgeProb(ageSamp, ageArr)
-
+ageProb2 = getAgeProb2(ageSamp, wArr, ageArr)
 print ('Age prob for {1}: {0}'.format(ageProb, ageSamp))
+print ('Age prob 2 for {1}: {0}'.format(ageProb2, ageSamp))
+
+
+spProb
+sp = 1
+spProb = getSpouseProb(sp, getArr('SibSp', data), getArr('SibSp', popSurv))
+print ('Sibling Spouse prob for {0}: {1}'.format(sp, spProb))
