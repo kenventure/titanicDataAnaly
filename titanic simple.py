@@ -81,11 +81,11 @@ def getAgeProb2(age, arrWhole, arrSurv):
     result = surCount/count
     return result
 
-def getAgeProb3 (age, arrWhole, arrSurv):
+def getAgeProb3 (ageIn, arrWhole, arrSurv):
     ageProb=0
     count=0
     upperBound=0
-    while upperBound<age:
+    while upperBound<ageIn:
         upperBound=upperBound+5
     lowerBound=upperBound-5
     surCount=0
@@ -96,7 +96,10 @@ def getAgeProb3 (age, arrWhole, arrSurv):
     for i in arrSurv:
         if i >=lowerBound and i <upperBound:
             surCount=surCount+1
-    result = surCount/count
+    if count==0:
+        result=0
+    else:
+        result = surCount/count
     return result
 
 def getFareProb (fare, arrWhole, arrSurv):
@@ -121,7 +124,14 @@ def getFareProb (fare, arrWhole, arrSurv):
     return result
 
 def getProb (no, arrWhole, arrSurv):
-    result = arrSurv.count(no) / arrWhole.count(no)
+    nSurv = arrSurv.count(no)
+    nWhole = arrWhole.count(no)
+    result = 0
+    if nWhole==0:
+        result = 0
+    else:
+        result = nSurv / nWhole
+    #result = arrSurv.count(no) / arrWhole.count(no)
     return result
 
 #read data from files
@@ -240,6 +250,45 @@ parchProb = getProb(cls, getArr('Parch', data), getArr('Parch', popSurv))
 print ('Parch prob for {0}: {1}'.format(parch, parchProb))
 
 fareProb = 0;
-fare=300
+fare=120
 fareProb = getFareProb(fare, getArr('Fare', data), getArr('Fare', popSurv))
 print ('Fare prob for {0}: {1}'.format(fare, fareProb))
+
+emb = 'C'
+embProb = getProb(emb, getStrArr('Embarked', data), getStrArr('Embarked', popSurv))
+
+print ('Embarked prob for {0}: {1}'.format(emb, embProb))
+
+#Start to read in the data
+for row in data:
+    # process row
+    cls = float(row['Pclass'])
+    classProb = getProb(cls, getArr('Pclass', data), getArr('Pclass', popSurv))
+    
+    sexProb=0
+    sex = row['Sex']
+    if sex=='male':
+        sexProb = maleProb
+    else:
+        sexProb = femProb
+      
+    ageStr = row['Age']
+    if len(ageStr)>0:
+        age = float (row['Age'])
+        ageProb3 = getAgeProb3(age, getArr('Age', data), getArr('Age', popSurv))
+    else:
+        ageProb3=0
+        
+    sp = float(row['SibSp'])
+    spProb = getProb(sp, getArr('SibSp', data), getArr('SibSp', popSurv))
+    
+    parch = float(row['Parch'])
+    parchProb = getProb(parch, getArr('Parch', data), getArr('Parch', popSurv))
+    
+    fare = float(row['Fare'])
+    fareProb = getFareProb(fare, getArr('Fare', data), getArr('Fare', popSurv))
+    
+    emb = row['Embarked']
+    embProb = getProb(emb, getStrArr('Embarked', data), getStrArr('Embarked', popSurv))
+    print ('{0} {1} {2} {3} {4} {5} {6}'.format(classProb, sexProb, ageProb3, spProb, parchProb, fareProb, embProb ))
+    
