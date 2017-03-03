@@ -260,6 +260,7 @@ embProb = getProb(emb, getStrArr('Embarked', data), getStrArr('Embarked', popSur
 print ('Embarked prob for {0}: {1}'.format(emb, embProb))
 
 #Start to read in the data
+success = 0
 for row in data:
     # process row
     cls = float(row['Pclass'])
@@ -290,5 +291,20 @@ for row in data:
     
     emb = row['Embarked']
     embProb = getProb(emb, getStrArr('Embarked', data), getStrArr('Embarked', popSurv))
-    print ('{0} {1} {2} {3} {4} {5} {6}'.format(classProb, sexProb, ageProb3, spProb, parchProb, fareProb, embProb ))
+    #print ('{0} {1} {2} {3} {4} {5} {6}'.format(classProb, sexProb, ageProb3, spProb, parchProb, fareProb, embProb ))
     
+    avg=0
+    avg = classProb + sexProb + ageProb3 + spProb + parchProb + fareProb + embProb
+    res = avg/7
+    threshold = 0.41915
+    if res>threshold:
+        sur = '1'
+       # print('1 {0}'.format(row['Survived']))
+    else:
+        sur = '0'
+       # print ('0 {0}'.format(row['Survived']))
+    if sur == row['Survived']:
+        success = success + 1
+        
+print(success)
+print (success / len(data))
