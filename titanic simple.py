@@ -81,8 +81,47 @@ def getAgeProb2(age, arrWhole, arrSurv):
     result = surCount/count
     return result
 
-def getSpouseProb (noSp, arrWhole, arrSurv):
-    result = arrSurv.count(noSp) / arrWhole.count(noSp)
+def getAgeProb3 (age, arrWhole, arrSurv):
+    ageProb=0
+    count=0
+    upperBound=0
+    while upperBound<age:
+        upperBound=upperBound+5
+    lowerBound=upperBound-5
+    surCount=0
+    for i in arrWhole:
+        if i >=lowerBound and i <upperBound:
+            count=count+1
+    
+    for i in arrSurv:
+        if i >=lowerBound and i <upperBound:
+            surCount=surCount+1
+    result = surCount/count
+    return result
+
+def getFareProb (fare, arrWhole, arrSurv):
+    fareProb=0
+    count=0
+    upperBound=0
+    while upperBound<fare:
+        upperBound=upperBound+50
+    lowerBound=upperBound-50
+    surCount=0
+    for i in arrWhole:
+        if i >=lowerBound and i <upperBound:
+            count=count+1
+    
+    for i in arrSurv:
+        if i >=lowerBound and i <upperBound:
+            surCount=surCount+1
+    if count==0:
+        result= 0
+    else:
+        result = surCount/count
+    return result
+
+def getProb (no, arrWhole, arrSurv):
+    result = arrSurv.count(no) / arrWhole.count(no)
     return result
 
 #read data from files
@@ -152,6 +191,22 @@ numF = arr3.count('1')
 numSec = arr3.count('2')
 numT = arr3.count('3')
 print('No 1: {0}, No 2: {1}, No 3:{2}'.format(numF, numSec, numT))
+
+#Fare
+fareArr = getArr('Fare', popSurv)
+fareOrgArr = getArr('Fare', data)
+print ('Size {0}'.format(len(fareOrgArr)))
+print('Min fare surv {0} max {1}'.format(min(fareArr), max(fareArr)))
+
+varFare = numpy.var(fareArr)
+varOrg = numpy.var(fareOrgArr)
+
+print ('Variance fare org {0} surv {1}'.format(varOrg, varFare))
+
+#for i in fareOrgArr:
+#    print (i)
+    
+print('Total Min fare {0} max {1}'.format(min(fareOrgArr), max(fareOrgArr)))
 #calculate probabilities
 #sex prob
 femProb = femaleInc/(maleInc+femaleInc)
@@ -161,14 +216,30 @@ print ('Female Prob: {0}, Male Prob: {1}'.format(femProb, maleProb))
 #age probabilities
 ageArr = getArr('Age', popSurv)
 wArr = getArr('Age', data)
-ageSamp= 50
+ageSamp= 25
 ageProb = getAgeProb(ageSamp, ageArr)
 ageProb2 = getAgeProb2(ageSamp, wArr, ageArr)
+ageProb3 = getAgeProb3(ageSamp, wArr, ageArr)
 print ('Age prob for {1}: {0}'.format(ageProb, ageSamp))
 print ('Age prob 2 for {1}: {0}'.format(ageProb2, ageSamp))
+print ('Age prob 3 for {1}: {0}'.format(ageProb3, ageSamp))
 
-
-spProb
-sp = 1
-spProb = getSpouseProb(sp, getArr('SibSp', data), getArr('SibSp', popSurv))
+spProb=0
+sp = 3
+spProb = getProb(sp, getArr('SibSp', data), getArr('SibSp', popSurv))
 print ('Sibling Spouse prob for {0}: {1}'.format(sp, spProb))
+
+classProb = 0
+cls = 1
+classProb = getProb(cls, getArr('Pclass', data), getArr('Pclass', popSurv))
+print ('CClass prob for {0}: {1}'.format(cls, classProb))
+
+parchProb = 0
+parch = 2
+parchProb = getProb(cls, getArr('Parch', data), getArr('Parch', popSurv))
+print ('Parch prob for {0}: {1}'.format(parch, parchProb))
+
+fareProb = 0;
+fare=300
+fareProb = getFareProb(fare, getArr('Fare', data), getArr('Fare', popSurv))
+print ('Fare prob for {0}: {1}'.format(fare, fareProb))
