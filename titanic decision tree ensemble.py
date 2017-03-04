@@ -361,7 +361,7 @@ with open('test.csv', newline='') as csvfile:
         dataTest.append(row)
   
 #with open('testRes.csv', 'w', newline='') as csvfile:
-    writer = open ('testTreeRes.csv', 'w')
+    writer = open ('testTreeEnsemRes.csv', 'w')
     #spamwriter = csv.writer(csvfile, delimiter='',
     #                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
     #spamwriter.writerow('PassengerId,Survived')
