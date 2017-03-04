@@ -308,3 +308,68 @@ for row in data:
         
 print(success)
 print (success / len(data))
+
+#work on the test data set
+dataTest = []
+with open('test.csv', newline='') as csvfile:
+   
+    spamreader = csv.DictReader(csvfile)
+    for row in spamreader:
+        
+        dataTest.append(row)
+  
+#with open('testRes.csv', 'w', newline='') as csvfile:
+    writer = open ('testSimpleRes.csv', 'w')
+    #spamwriter = csv.writer(csvfile, delimiter='',
+    #                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    #spamwriter.writerow('PassengerId,Survived')
+    writer.write('PassengerId,Survived\n')   
+    for row in dataTest:
+        # process row
+        cls = float(row['Pclass'])
+        classProb = getProb(cls, getArr('Pclass', data), getArr('Pclass', popSurv))
+        
+        sexProb=0
+        sex = row['Sex']
+        if sex=='male':
+            sexProb = maleProb
+        else:
+            sexProb = femProb
+          
+        ageStr = row['Age']
+        if len(ageStr)>0:
+            age = float (row['Age'])
+            ageProb3 = getAgeProb3(age, getArr('Age', data), getArr('Age', popSurv))
+        else:
+            ageProb3=0
+            
+        sp = float(row['SibSp'])
+        spProb = getProb(sp, getArr('SibSp', data), getArr('SibSp', popSurv))
+        
+        parch = float(row['Parch'])
+        parchProb = getProb(parch, getArr('Parch', data), getArr('Parch', popSurv))
+        
+        fareStr = row['Fare']
+        if len(fareStr)>0:
+            fare = float(fareStr)
+        else:
+            fare = 0
+        
+        fareProb = getFareProb(fare, getArr('Fare', data), getArr('Fare', popSurv))
+        
+        emb = row['Embarked']
+        embProb = getProb(emb, getStrArr('Embarked', data), getStrArr('Embarked', popSurv))
+        print ('{0} {1} {2} {3} {4} {5} {6}'.format(classProb, sexProb, ageProb3, spProb, parchProb, fareProb, embProb ))
+        
+        avg=0
+        avg = classProb + sexProb + ageProb3 + spProb + parchProb + fareProb + embProb
+        res = avg/7
+        threshold = 0.41915
+        if res>threshold:
+            sur = '1'
+        else:
+            sur = '0'
+        #spamwriter.writerow(row['PassengerId']+','+sur)
+        writer.write(row['PassengerId']+','+sur+'\n')
+        
+    writer.close()
