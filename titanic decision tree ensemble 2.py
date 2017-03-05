@@ -87,7 +87,7 @@ w, h = 7, int(totalNum/length)
 #xArr = []
 
 xArr = [[[0 for k in range(w)] for j in range(h)] for i in range(length)]
-ansArr=[[0 for k in range(w)] for j in range(length)]
+ansArr=[[0 for k in range(h)] for j in range(length)]
 
 clfArr = []
 #for i in range(0,length):
@@ -144,7 +144,7 @@ for row in data:
     xArr[index][subIndex][4]=parchProb
     xArr[index][subIndex][5]=fareProb
     xArr[index][subIndex][6]=embProb
-    ansArr[index].append(float(row['Survived'])) 
+    ansArr[index][subIndex] = float(row['Survived'])
     
             
     i=i+1
