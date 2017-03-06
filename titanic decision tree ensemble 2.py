@@ -78,7 +78,7 @@ with open('train.csv', newline='') as csvfile:
      
 
 totalNum = 891
-length = 8
+length = 10
 
 remainder = totalNum%length
 
@@ -159,12 +159,7 @@ for i in range(0, length)  :
 for i in range (0, length):
     clfArr[i].fit(xArr[i], ansArr[i])
     
-clf1 = tree.DecisionTreeClassifier()
-clf1.fit(xArr1, ansArr1)
-clf2 = tree.DecisionTreeClassifier()
-clf2.fit(xArr2, ansArr2)
-clf3 = tree.DecisionTreeClassifier()
-clf3.fit(xArr3, ansArr3)
+
 #SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
 #    decision_function_shape=None, degree=3, gamma='auto', kernel='rbf',
 #    max_iter=-1, probability=False, random_state=None, shrinking=True,
@@ -213,22 +208,19 @@ for row in data:
     arrAns.append(parchProb)
     arrAns.append(fareProb)
     arrAns.append(embProb)
-    ans1 = clf1.predict([arrAns])
-    ans2 = clf2.predict([arrAns])
-    ans3 = clf3.predict([arrAns])
+
+    sum = 0
+    for i in range (0, length):
+        sum= sum + clfArr[i].predict([arrAns])
     
-    count = 0
-    ans=0
-    if ans1==1:
-        count=count+1
-    if ans2==1:
-        count=count+1
-    if ans3==1:
-        count=count+1
-    if count>=2:
-        ans=1
+    
+    result = sum / length
+    
+    if result > 0.5:
+        ans = 1
     else:
         ans = 0
+        
     if ans==float(row['Survived']):
         success=success+1
 
@@ -246,7 +238,7 @@ with open('test.csv', newline='') as csvfile:
         dataTest.append(row)
   
 #with open('testRes.csv', 'w', newline='') as csvfile:
-    writer = open ('testTreeEnsemRes.csv', 'w')
+    writer = open ('testTreeBagging.csv', 'w')
     #spamwriter = csv.writer(csvfile, delimiter='',
     #                        quotechar='|', quoting=csv.QUOTE_MINIMAL)
     #spamwriter.writerow('PassengerId,Survived')
@@ -293,23 +285,17 @@ with open('test.csv', newline='') as csvfile:
         arrAns.append(parchProb)
         arrAns.append(fareProb)
         arrAns.append(embProb)
-        ans1 = clf1.predict([arrAns])
-        ans2 = clf2.predict([arrAns])
-        ans3 = clf3.predict([arrAns])
+        sum = 0
+        for i in range (0, length):
+            sum= sum + clfArr[i].predict([arrAns])
         
-        count = 0
-        ans=0
-        if ans1==1:
-            count=count+1
-        if ans2==1:
-            count=count+1
-        if ans3==1:
-            count=count+1
-        wriStr=""
-        if count>=2:
-            wriStr='1'
+        
+        result = sum / length
+        
+        if result > 0.5:
+            wriStr = '1'
         else:
-            wriStr='0'
+            wriStr = '0'
 
         writer.write(row['PassengerId']+','+wriStr+'\n')
         
